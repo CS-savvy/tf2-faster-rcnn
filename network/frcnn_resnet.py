@@ -4,12 +4,7 @@ from tensorflow.keras import backend as K
 
 def identity_block(input_tensor, kernel_size, filters, stage, block, trainable=True):
     nb_filter1, nb_filter2, nb_filter3 = filters
-
-    if K.image_dim_ordering() == 'tf':
-        bn_axis = 3
-    else:
-        bn_axis = 1
-
+    bn_axis = 3
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
 
@@ -33,11 +28,7 @@ def identity_block(input_tensor, kernel_size, filters, stage, block, trainable=T
 def conv_block(input_tensor, kernel_size, filters, stage, block, strides=(2, 2), trainable=True):
 
     nb_filter1, nb_filter2, nb_filter3 = filters
-    if K.image_dim_ordering() == 'tf':
-        bn_axis = 3
-    else:
-        bn_axis = 1
-
+    bn_axis = 3
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
 
@@ -60,13 +51,7 @@ def conv_block(input_tensor, kernel_size, filters, stage, block, strides=(2, 2),
     return x
 
 
-def nn_base(input_tensor=None, trainable=False):
-
-    # Determine proper input shape
-    if K.image_dim_ordering() == 'th':
-        input_shape = (3, None, None)
-    else:
-        input_shape = (None, None, 3)
+def nn_base(input_tensor=None, input_shape = (None, None, 3), trainable=False):
 
     if input_tensor is None:
         img_input = Input(shape=input_shape)
@@ -76,11 +61,7 @@ def nn_base(input_tensor=None, trainable=False):
         else:
             img_input = input_tensor
 
-    if K.image_dim_ordering() == 'tf':
-        bn_axis = 3
-    else:
-        bn_axis = 1
-
+    bn_axis = 3
     x = ZeroPadding2D((3, 3))(img_input)
 
     x = Conv2D(64, (7, 7), strides=(2, 2), name='conv1', trainable = trainable)(x)
@@ -105,3 +86,4 @@ def nn_base(input_tensor=None, trainable=False):
     x = identity_block(x, 3, [256, 256, 1024], stage=4, block='f', trainable = trainable)
 
     return x
+
