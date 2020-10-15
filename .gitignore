@@ -5,7 +5,8 @@ __pycache__/
 
 #user added
 *.png
-
+dataset/
+.idea/
 
 # C extensions
 *.so
