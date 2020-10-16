@@ -1,4 +1,4 @@
-from network import frcnn_resnet
+pafrom network import frcnn_resnet
 from pathlib import Path
 from tensorflow.keras.utils import plot_model
 from tensorflow.keras.layers import Input

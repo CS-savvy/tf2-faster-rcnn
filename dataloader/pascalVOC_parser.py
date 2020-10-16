@@ -1,8 +1,7 @@
-import os
-import cv2
 import xml.etree.ElementTree as ET
-import traceback
 from pathlib import Path
+import traceback
+
 
 def get_data(dataset_path):
 
