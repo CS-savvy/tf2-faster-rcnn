@@ -31,7 +31,7 @@ def get_data(dataset_path):
     except Exception:
         print(traceback.format_exc())
 
-    annotation_files = annot_path.glob("*.json")
+    annotation_files = annot_path.glob("*.xml")
     for annot in annotation_files:
         try:
             et = ET.parse(annot)
