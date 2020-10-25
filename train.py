@@ -2,6 +2,8 @@ from dataloader import pascalVOC_parser
 from pathlib import Path
 from experiment import config
 from optparse import OptionParser
+from dataloader.data_generator import KerasDataGenerator, simple_genetator
+import numpy as np
 
 this_dir = Path.cwd()
 
@@ -39,5 +41,30 @@ all_imgs, classes_count, class_mapping = pascalVOC_parser.get_data(Path(options.
 
 all_config.class_mapping = class_mapping
 inv_map = {v: k for k, v in class_mapping.items()}
+
+train_imgs = [s for s in all_imgs if s['imageset'] == 'trainval']
+val_imgs = [s for s in all_imgs if s['imageset'] == 'test']
+
+def get_img_output_length(width, height):
+    def get_output_length(input_length):
+        # zero_pad
+        input_length += 6
+        # apply 4 strided convolutions
+        filter_sizes = [7, 3, 1, 1]
+        stride = 2
+        for filter_size in filter_sizes:
+            input_length = (input_length - filter_size + stride) // stride
+        return input_length
+
+    return get_output_length(width), get_output_length(height)
+
+# train_datagen = KerasDataGenerator(train_imgs, all_config, get_img_output_length)
+train_datagen = simple_genetator(train_imgs, all_config, get_img_output_length)
+
+re = []
+for i in range(10):
+    X, y, meta_info = next(train_datagen)
+    re.append(meta_info)
+
 
 print()

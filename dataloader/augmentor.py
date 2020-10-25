@@ -10,7 +10,7 @@ def augment(img_data, config, augment=True):
     assert 'height' in img_data
 
     img_data_aug = copy.deepcopy(img_data)
-    img = cv2.imread(img_data_aug['filepath'])
+    img = cv2.imread(img_data_aug['filepath'].as_posix())
 
     if augment:
         rows, cols = img.shape[:2]
@@ -31,14 +31,14 @@ def augment(img_data, config, augment=True):
                 bbox['y1'] = rows - y2
 
         if config.rot_90:
-            angle = np.random.choice([0,90,180,270],1)[0]
+            angle = np.random.choice([0, 90, 180, 270], 1)[0]
             if angle == 270:
-                img = np.transpose(img, (1,0,2))
+                img = np.transpose(img, (1, 0, 2))
                 img = cv2.flip(img, 0)
             elif angle == 180:
                 img = cv2.flip(img, -1)
             elif angle == 90:
-                img = np.transpose(img, (1,0,2))
+                img = np.transpose(img, (1, 0, 2))
                 img = cv2.flip(img, 1)
             elif angle == 0:
                 pass
